@@ -1,0 +1,43 @@
+.option-container {
+    position: relative;
+    display: inline-block;
+}
+
+.option-icon {
+    cursor: pointer;
+}
+
+.option-menu {
+    position: absolute;
+    top: 20px;
+    /* Adjust this value to control the distance from the bottom */
+    right: 0;
+    z-index: 1;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0px 0px 8px 0px #0000001A;
+    padding: 5px 0;
+    min-width: 120px;
+    display: none;
+    /* Initially hide the menu */
+}
+
+.option-container.active .option-menu {
+    display: block;
+    /* Display the menu when active */
+}
+
+.option-menu div {
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.option-menu div:hover {
+    background-color: #f4f4f4;
+    /* Hover effect */
+}
+
+.delete-button {
+    color: red;
+}

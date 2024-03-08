@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
 import "./App.scss";
-import useTodos from "./api/useTodos";
 import ProgressBarPresenter from "./presenters/ProgressBarPresenter";
 import TaskListPresenter from "./presenters/TaskListPresenter";
+import useTodos, { ITask } from "./api/useTodos";
 
 export enum OPTION_VALUE {
   ALL = "All",
@@ -22,12 +22,27 @@ export const OPTIONS: IOption[] = [
 ];
 
 function App() {
-  const { todoList, completedTaskCount } = useTodos();
+  const {
+    todoList,
+    todoListCount,
+    completedTaskCount,
+    onUpdateCompleteTask,
+    onUpdateTitleTask,
+    onAddNewTask,
+    onDeleteTask,
+  } = useTodos();
   const [filter, setFilter] = useState(OPTION_VALUE.ALL);
 
-  const todoListCount = useMemo(() => {
-    return todoList?.length || 0;
-  }, [todoList?.length]);
+  const _todoList: ITask[] = useMemo(() => {
+    switch (filter) {
+      case OPTION_VALUE.DONE:
+        return todoList.filter((todo: ITask) => todo.completed) ?? [];
+      case OPTION_VALUE.UNDONE:
+        return todoList.filter((todo: ITask) => !todo.completed) ?? [];
+      default:
+        return todoList ?? [];
+    }
+  }, [filter, todoList]);
 
   const onChangeFilter = useCallback((value: string) => {
     setFilter(value as OPTION_VALUE);
@@ -44,9 +59,14 @@ function App() {
         </section>
         <section className="task-list-section">
           <TaskListPresenter
+            tasks={_todoList}
             seletedFilterOption={filter}
             filterOptions={OPTIONS}
             onChangeFilter={onChangeFilter}
+            onUpdateCompleteTask={onUpdateCompleteTask}
+            onUpdateTitleTask={onUpdateTitleTask}
+            onAddNewTask={onAddNewTask}
+            onDeleteTask={onDeleteTask}
           />
         </section>
       </div>

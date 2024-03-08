@@ -1,0 +1,56 @@
+.checkbox {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px; // Adjust font size as needed
+
+    input[type="checkbox"] {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 22px; // Size of the checkbox
+        height: 22px; // Size of the checkbox
+        border: 2px solid #585292; // Border color of the checkbox
+        border-radius: 6px; // Rounded corners for the checkbox
+        margin-right: 10px; // Spacing between checkbox and label
+        outline: none;
+        cursor: pointer;
+        position: relative;
+
+        &:checked {
+            background-color: #585292; // Background color when checked
+            border-color: #585292; // Border color when checked
+        }
+
+        &:hover:not(:checked) {
+            border-color: #474264; // Darkened border color on hover
+        }
+
+        &:checked:hover {
+
+            background-color: #474264; // Background color when checked
+            border-color: #474264; // Border color when checked
+
+        }
+
+        // Add the checkmark visual indicator
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-100%, -80%) rotate(45deg); // Rotate the check mark
+            width: 4px; // Width of the checkmark
+            height: 8px; // Height of the checkmark
+            border: solid white; // Color of the checkmark
+            border-width: 0 1px 1px 0;
+            transform-origin: bottom;
+            opacity: 0; // Initially hidden
+            transition: opacity 0.3s ease; // Smooth transition for opacity
+        }
+
+        &:checked::after {
+            opacity: 1; // Show the checkmark when checkbox is checked
+        }
+    }
+}

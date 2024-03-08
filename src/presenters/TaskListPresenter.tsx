@@ -1,6 +1,8 @@
 import { IOption, OPTION_VALUE } from "../App";
 import { ITask } from "../api/useTodos";
 import Dropdown from "../components/Dropdown";
+import NewTaskItem from "../components/NewTaskItem";
+import TaskItem from "../components/TaskItem";
 import "./TaskListPresenter.scss";
 
 export interface IPropsTaskListPresenter {
@@ -8,6 +10,10 @@ export interface IPropsTaskListPresenter {
   filterOptions: IOption[];
   onChangeFilter: (option: string) => void;
   tasks?: ITask[];
+  onUpdateCompleteTask: (taskId: string, completed: boolean) => void;
+  onUpdateTitleTask: (taskId: string, title: string) => void;
+  onAddNewTask: (title: string) => void;
+  onDeleteTask: (taskId: string) => void;
 }
 
 const TaskListPresenter = (props: IPropsTaskListPresenter) => {
@@ -16,6 +22,10 @@ const TaskListPresenter = (props: IPropsTaskListPresenter) => {
     filterOptions,
     seletedFilterOption = OPTION_VALUE.ALL,
     onChangeFilter,
+    onUpdateCompleteTask,
+    onUpdateTitleTask,
+    onAddNewTask,
+    onDeleteTask,
   } = props;
   return (
     <div className="task-list-presenter">
@@ -27,6 +37,26 @@ const TaskListPresenter = (props: IPropsTaskListPresenter) => {
           onChange={onChangeFilter}
         />
       </div>
+      <section className="tasks-wrapper" id="tasks-section">
+        {(tasks?.length || 0) > 0 ? (
+          <>
+            {tasks?.map((task: ITask) => (
+              <TaskItem
+                key={task.id}
+                title={task.title}
+                id={task.id}
+                completed={task.completed}
+                onClickComplele={onUpdateCompleteTask}
+                onEditTitle={onUpdateTitleTask}
+                onDeleteTask={onDeleteTask}
+              />
+            ))}
+            <NewTaskItem key={"new-task"} onAddNewTask={onAddNewTask} />
+          </>
+        ) : (
+          <span>There is no tasks</span>
+        )}
+      </section>
     </div>
   );
 };
