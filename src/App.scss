@@ -8,6 +8,16 @@
     background-color: #F5F5F5;
     border-radius: 20px;
 
+    // Responsive styles
+    @media (max-width: 768px) {
+      padding: 40px;
+    }
+
+    @media (max-width: 576px) {
+      max-width: 90%;
+      padding: 20px;
+    }
+
     .task-list-section {
       margin-top: 32px;
     }
