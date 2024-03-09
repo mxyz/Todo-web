@@ -12,6 +12,7 @@
         height: 22px; // Size of the checkbox
         border: 2px solid #585292; // Border color of the checkbox
         border-radius: 6px; // Rounded corners for the checkbox
+        margin: 0;
         margin-right: 10px; // Spacing between checkbox and label
         outline: none;
         cursor: pointer;
@@ -27,7 +28,6 @@
         }
 
         &:checked:hover {
-
             background-color: #474264; // Background color when checked
             border-color: #474264; // Border color when checked
 

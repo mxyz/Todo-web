@@ -39,23 +39,22 @@ const TaskListPresenter = (props: IPropsTaskListPresenter) => {
       </div>
       <section className="tasks-wrapper" id="tasks-section">
         {(tasks?.length || 0) > 0 ? (
-          <>
-            {tasks?.map((task: ITask) => (
-              <TaskItem
-                key={task.id}
-                title={task.title}
-                id={task.id}
-                completed={task.completed}
-                onClickComplele={onUpdateCompleteTask}
-                onEditTitle={onUpdateTitleTask}
-                onDeleteTask={onDeleteTask}
-              />
-            ))}
-            <NewTaskItem key={"new-task"} onAddNewTask={onAddNewTask} />
-          </>
+          tasks?.map((task: ITask) => (
+            <TaskItem
+              key={task.id}
+              title={task.title}
+              id={task.id}
+              completed={task.completed}
+              onClickComplele={onUpdateCompleteTask}
+              onEditTitle={onUpdateTitleTask}
+              onDeleteTask={onDeleteTask}
+            />
+          ))
         ) : (
           <span>There is no tasks</span>
         )}
+
+        <NewTaskItem key={"new-task"} onSubmitTask={onAddNewTask} />
       </section>
     </div>
   );

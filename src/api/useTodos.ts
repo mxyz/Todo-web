@@ -34,7 +34,9 @@ const useTodos = () => {
   // add new task
   const onAddNewTask = useCallback(
     (title: string) => {
-      addNewTask({ data: { title, completed: false } }).then(() => refetch());
+      addNewTask({ data: { title: title.trim(), completed: false } }).then(() =>
+        refetch()
+      );
     },
     [addNewTask, refetch]
   );

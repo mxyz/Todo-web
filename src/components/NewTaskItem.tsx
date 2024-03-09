@@ -1,28 +1,48 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, KeyboardEvent } from "react";
 import "./NewTaskItem.scss";
+import Button from "./Button";
 
 export interface IPropsNewTaskItem {
-  onAddNewTask: (title: string) => void;
+  initTitle?: string;
+  placeholder?: string;
+  onSubmitTask: (title: string) => void;
+  buttonLabel?: string;
 }
 
 const NewTaskItem = (props: IPropsNewTaskItem) => {
-  const { onAddNewTask: _onAddTask } = props;
-  const [title, setTitle] = useState<string | undefined>(undefined);
+  const {
+    initTitle,
+    placeholder = "Add your todo...",
+    onSubmitTask,
+    buttonLabel = "Save",
+  } = props;
+  const [title, setTitle] = useState<string>(initTitle || "");
 
-  const onAddTask = useCallback(() => {
+  const onClickSubmit = useCallback(() => {
     if (title) {
-      _onAddTask(title);
+      onSubmitTask(title);
+      setTitle("");
+    } else if (title.trim().length === 0 && initTitle) {
+      onSubmitTask(initTitle);
     }
-  }, [_onAddTask, title]);
+  }, [initTitle, onSubmitTask, title]);
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      onClickSubmit();
+    }
+  };
 
   return (
-    <div className="task-item">
+    <div className="new-task-item">
       <input
+        className="new-task-input"
         value={title}
-        placeholder={"Add your todo..."}
+        placeholder={placeholder}
         onChange={(event) => setTitle(event.target.value)}
+        onKeyDown={handleKeyDown}
       />
-      <button onClick={onAddTask}>Add</button>
+      <Button onClick={onClickSubmit}>{buttonLabel}</Button>
     </div>
   );
 };
