@@ -2,7 +2,8 @@ import { useCallback, useMemo, useState } from "react";
 import "./App.scss";
 import ProgressBarPresenter from "./presenters/ProgressBarPresenter";
 import TaskListPresenter from "./presenters/TaskListPresenter";
-import useTodos, { ITask } from "./api/useTodos";
+import useTodos from "./api/useTodos";
+import { ITask } from "./types/taskTypes";
 
 export enum OPTION_VALUE {
   ALL = "All",

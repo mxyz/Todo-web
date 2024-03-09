@@ -1,8 +1,8 @@
 import { IOption, OPTION_VALUE } from "../App";
-import { ITask } from "../api/useTodos";
 import Dropdown from "../components/Dropdown";
 import NewTaskItem from "../components/NewTaskItem";
 import TaskItem from "../components/TaskItem";
+import { ITask } from "../types/taskTypes";
 import "./TaskListPresenter.scss";
 
 export interface IPropsTaskListPresenter {
@@ -51,7 +51,7 @@ const TaskListPresenter = (props: IPropsTaskListPresenter) => {
             />
           ))
         ) : (
-          <span>There is no tasks</span>
+          <span>There is no {seletedFilterOption} task(s)</span>
         )}
 
         <NewTaskItem key={"new-task"} onSubmitTask={onAddNewTask} />

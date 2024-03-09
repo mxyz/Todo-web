@@ -1,27 +1,38 @@
 import useAxios from "axios-hooks";
-import { useCallback, useMemo } from "react";
-
-export interface ITask {
-  id: string;
-  title: string;
-  completed: boolean;
-}
+import { useCallback, useEffect, useMemo } from "react";
+import { ITask } from "../types/taskTypes";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import {
+  addTodo,
+  fetchTodosSuccess,
+  removeTodo,
+  toggleTodo,
+  updateTitleTodo,
+} from "../reducers/todoSlice";
 
 const useTodos = () => {
-  const [{ data, loading: isLoadingTodoList }, refetch] = useAxios(
-    `http://localhost:3001/todos`
-  );
+  const { todos } = useSelector((state: RootState) => state.todos);
+  const dispatch = useDispatch();
+  const [{ data: todoListData, loading: isLoadingTodoList }, refetch] =
+    useAxios(`http://localhost:3001/todos`);
 
   const todoList = useMemo(() => {
-    return data?.map((todo: ITask) => ({ ...todo })) || [];
-  }, [data]);
+    return todoListData?.map((todo: ITask) => ({ ...todo })) || [];
+  }, [todoListData]);
+
+  useEffect(() => {
+    if (todoList) {
+      dispatch(fetchTodosSuccess(todoList));
+    }
+  }, [dispatch, todoList]);
 
   const completedTaskCount: number = useMemo(() => {
-    if (todoList) {
-      return todoList?.filter((todo: ITask) => todo.completed)?.length || 0;
+    if (todos) {
+      return todos?.filter((todo: ITask) => todo.completed)?.length || 0;
     }
     return 0;
-  }, [todoList]);
+  }, [todos]);
 
   const [, addNewTask] = useAxios(
     {
@@ -34,14 +45,16 @@ const useTodos = () => {
   // add new task
   const onAddNewTask = useCallback(
     (title: string) => {
-      addNewTask({ data: { title: title.trim(), completed: false } }).then(() =>
-        refetch()
-      );
+      addNewTask({ data: { title: title.trim(), completed: false } })
+        .then((response) => {
+          dispatch(addTodo(response.data));
+        })
+        .finally(() => refetch());
     },
-    [addNewTask, refetch]
+    [addNewTask, dispatch, refetch]
   );
   // PATCH
-  const [, updateCompleteTask] = useAxios(
+  const [{ loading: updateTaskLoading }, updateTask] = useAxios(
     {
       url: `http://localhost:3001/todos/`, // Note: taskId will be appended later
       method: "PATCH",
@@ -52,23 +65,33 @@ const useTodos = () => {
   // update completed task
   const onUpdateCompleteTask = useCallback(
     (taskId: string, completed: boolean) => {
-      updateCompleteTask({
+      if (updateTaskLoading) return;
+      updateTask({
         url: `http://localhost:3001/todos/${taskId}`,
         data: { completed },
-      }).then(() => refetch());
+      })
+        .then((response) => {
+          dispatch(toggleTodo({ id: taskId, completed }));
+        })
+        .finally(() => refetch());
     },
-    [refetch, updateCompleteTask]
+    [dispatch, refetch, updateTask, updateTaskLoading]
   );
 
   // update title task
   const onUpdateTitleTask = useCallback(
     (taskId: string, title: string) => {
-      updateCompleteTask({
+      updateTask({
         url: `http://localhost:3001/todos/${taskId}`,
         data: { title },
-      }).then(() => refetch());
+      })
+        .then((response) => {
+          const { id, title } = response.data;
+          dispatch(updateTitleTodo({ id, title }));
+        })
+        .finally(() => refetch());
     },
-    [refetch, updateCompleteTask]
+    [dispatch, refetch, updateTask]
   );
   // DELETE
   const [, deleteTask] = useAxios(
@@ -84,14 +107,19 @@ const useTodos = () => {
     (taskId: string) => {
       deleteTask({
         url: `http://localhost:3001/todos/${taskId}`,
-      }).then(() => refetch());
+      })
+        .then((response) => {
+          const { id } = response.data;
+          dispatch(removeTodo(id));
+        })
+        .finally(() => refetch());
     },
-    [deleteTask, refetch]
+    [deleteTask, dispatch, refetch]
   );
 
   return {
-    todoList: todoList,
-    todoListCount: todoList?.length || 0,
+    todoList: todos,
+    todoListCount: todos?.length || 0,
     isLoadingTodoList,
     completedTaskCount,
     onAddNewTask,

@@ -1,10 +1,10 @@
 import { useCallback, useState } from "react";
-import { ITask } from "../api/useTodos";
 import Option from "./Option";
 import Checkbox from "./Checkbox";
 import "./TaskItem.scss";
 import classNames from "classnames";
 import NewTaskItem from "./NewTaskItem";
+import { ITask } from "../types/taskTypes";
 
 export interface IPropsTaskItem extends ITask {
   onClickComplele?: (id: string, checked: boolean) => void;

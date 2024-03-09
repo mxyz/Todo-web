@@ -38,11 +38,14 @@ const NewTaskItem = (props: IPropsNewTaskItem) => {
       <input
         className="new-task-input"
         value={title}
+        maxLength={150}
         placeholder={placeholder}
         onChange={(event) => setTitle(event.target.value)}
         onKeyDown={handleKeyDown}
       />
-      <Button onClick={onClickSubmit}>{buttonLabel}</Button>
+      {title.length > 0 && (
+        <Button onClick={onClickSubmit}>{buttonLabel}</Button>
+      )}
     </div>
   );
 };
