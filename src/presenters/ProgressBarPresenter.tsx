@@ -1,5 +1,5 @@
 import ProgressBar, { IPropsProgressBar } from "../components/ProgressBar";
-import "./ProgressBarPresenter.scss"; // Import SCSS file for styling
+import "./ProgressBarPresenter.scss";
 
 export type IPropsProgressBarPresenter = IPropsProgressBar;
 
