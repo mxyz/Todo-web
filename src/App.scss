@@ -11,11 +11,15 @@
     // Responsive styles
     @media (max-width: 768px) {
       padding: 40px;
+      margin-top: 20px; // Adjusted margin-top value for smaller screens
+      margin-bottom: 20px; // Adjusted margin-bottom value for smaller screens
     }
 
     @media (max-width: 576px) {
       max-width: 90%;
       padding: 20px;
+      margin-top: 10px; // Adjusted margin-top value for even smaller screens
+      margin-bottom: 10px; // Adjusted margin-bottom value for even smaller screens
     }
 
     .task-list-section {
